@@ -1,0 +1,1 @@
+Esta API REST, desarrollada con Spring Boot, ofrece una solución para la gestión de una Biblioteca.  cuenta con  operaciones CRUD, búsquedas personalizadas permite realizar préstamos de libros y determinar si los libros pueden ser prestados o ya fueron prestados  y mas
