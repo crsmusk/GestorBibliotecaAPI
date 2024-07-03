@@ -1,82 +1,129 @@
 package com.api.api.Servicio;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.api.api.Entidades.DTO.libroDTO;
 import com.api.api.Entidades.Entities.libro;
 import com.api.api.Excepciones.libroException;
 import com.api.api.Repositorio.libroRepositorio;
+import com.api.api.persistencia.IlibroDAO;
 
 @Service
-public class libroService {
+public class libroService implements IlibroDAO {
    @Autowired
    private libroRepositorio libroRepo;
 
-   public List<libro> getLibros(){
-    return libroRepo.findAll();
+   @Override
+   public List<libroDTO> findAll() {
+       List<libroDTO> libroList = libroRepo.findAll().stream().map(libro->libroDTO.builder()
+      .autor(libro.getAutor())
+      .titulo(libro.getTitulo())
+      .genero(libro.getGenero())
+      .estado(libro.isEstado())
+      .build()).toList();
+       
+      return libroList;
+  }
+
+   @Override
+   public Optional<libroDTO> findById(Long id) {
+     libro libro=libroRepo.findById(id).orElseThrow(()-> new libroException("libro no encontrado"+id));
+     libroDTO librito=libroDTO.builder()
+     .autor(libro.getAutor())
+     .titulo(libro.getTitulo())
+     .genero(libro.getGenero())
+     .estado(libro.isEstado())
+     .build();
+     return Optional.of(librito);
    }
 
-   public libro getLibro(Long id){
-    return libroRepo.findById(id).orElseThrow(()-> new libroException("libro no encontrado con el id "));
+   @Override
+   public void save(libroDTO librodDto) {
+      libro libro=new libro();
+      libro.setAutor(librodDto.getAutor());
+      libro.setTitulo(librodDto.getTitulo());
+      libro.setGenero(librodDto.getGenero());
+      libro.setEstado(librodDto.isEstado());
+      libroRepo.save(libro);
    }
 
-   public libro createLibro(libroDTO libroDTO){
-    libro libro=new libro();
-    libro.setTitulo(libroDTO.getTitulo());
-    libro.setAutor(libroDTO.getAutor());
-    libro.setGenero(libroDTO.getGenero());
-    libro.setEstado(libroDTO.isEstado());
-    return libroRepo.save(libro);
+   @Override
+   public void deleteById(Long id) {
+     libroRepo.deleteById(id);
    }
 
-   public libro updateLibro(Long id,libroDTO libroDTO){
-    libro libro=libroRepo.findById(id).orElseThrow(()-> new libroException("libro no encontrado con el id "+id));
-    libro.setTitulo(libroDTO.getTitulo());
-    libro.setAutor(libroDTO.getAutor());
-    libro.setGenero(libroDTO.getGenero());
-    libro.setEstado(libroDTO.isEstado());
-    return libroRepo.save(libro);
+   @Override
+   public Optional<libroDTO>findByTitulo(String titulo) {
+       Optional<libro>libroOptional=libroRepo.findByTitulo(titulo);
+       if(libroOptional.isPresent()){
+         libro Libro=libroOptional.get();
+         libroDTO libro=libroDTO.builder()
+         .autor(Libro.getAutor())
+         .titulo(Libro.getTitulo())
+         .genero(Libro.getGenero())
+         .estado(Libro.isEstado())
+         .build();
+         return Optional.of(libro);
+       }
+         throw new libroException("no se encontro el libro");
 
+       
+       
    }
 
-   public void deleteLibro(Long id){
-    libro libro=libroRepo.findById(id).orElseThrow(()-> new libroException("libro no encontrado con el id "+id));
-    libroRepo.delete(libro);
+   @Override
+   public List<libroDTO> findByAutor(String autor) {
+      List<libro>lista=libroRepo.findAll();
+      List<Long>ids=new ArrayList<>();
+      for (libro libro:lista) {
+          if(libro.getAutor().equals(autor)){
+              ids.add(libro.getId());
+          }
+      }
+      List<libroDTO> libroList = libroRepo.findAllById(ids).stream().map(libro->libroDTO.builder()
+      .autor(libro.getAutor())
+      .titulo(libro.getTitulo())
+      .genero(libro.getGenero())
+      .estado(libro.isEstado())
+      .build()).toList();
+      
+      return libroList;
    }
 
-   public libro searchTitulo(String titulo){
-    return libroRepo.findByTitulo(titulo).orElseThrow(()-> new libroException("libro no encontrado con el titulo "+titulo)); 
+   @Override
+   public List<libroDTO> findByGenero(String genero) {
+      List<libro>lista=libroRepo.findAll();
+      List<Long>ids=new ArrayList<>();
+      for (libro libro:lista) {
+          if(libro.getGenero().equals(genero)){
+              ids.add(libro.getId());
+          }
+      }
+      List<libroDTO> libroList = libroRepo.findAllById(ids).stream().map(libro->libroDTO.builder()
+      .autor(libro.getAutor())
+      .titulo(libro.getTitulo())
+      .genero(libro.getGenero())
+      .estado(libro.isEstado())
+      .build()).toList();
+      
+      return libroList;
    }
 
-   public List<libro> searchAutor(String autor){
-    List<libro>lista=libroRepo.findAll();
-    List<Long>ids=new ArrayList<>();
-    for (libro libro:lista) {
-        if(libro.getAutor().equals(autor)){
-            ids.add(libro.getId());
-        }
+   @Override
+   public void update(Long id, libroDTO libroDTO) {
+    Optional<libro>libroOpional=libroRepo.findById(id);
+    if(libroOpional.isPresent()){
+      libro libro=libroOpional.get();
+      libro.setTitulo(libroDTO.getTitulo());
+      libro.setAutor(libroDTO.getAutor());
+      libro.setGenero(libroDTO.getGenero());
+      libro.setEstado(libroDTO.isEstado());
+      libroRepo.save(libro);
     }
-    if(ids.isEmpty()){
-        throw new libroException("no se encontro ningun libro con el autor "+autor);
-    }
-    return libroRepo.findAllById(ids);
+    throw new libroException("no se encontro el libro");
    }
 
-   public List<libro> searchGenero(String genero){
-    List<libro>lista=libroRepo.findAll();
-    List<Long>ids=new ArrayList<>();
-    for (libro libro:lista) {
-        if(libro.getGenero().equals(genero)){
-            ids.add(libro.getId());
-        }
-    }
-    if(ids.isEmpty()){
-        throw new libroException("no econtro ningun libro con genero de "+genero);
-    }
-    return libroRepo.findAllById(ids);
-   }
-   
   
 }
