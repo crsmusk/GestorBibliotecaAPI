@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,35 +15,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.api.Entidades.DTO.libroDTO;
+import com.api.api.Excepciones.Exceptions.libroException;
+import com.api.api.Model.DTO.libroDto;
 import com.api.api.Servicio.libroService;
 
 import jakarta.validation.Valid;
-@RequestMapping("/libro")
+@RequestMapping("/libros")
 @RestController
 public class libroControlador {
  @Autowired
  private libroService libroService;
 
  @GetMapping
- public List<libroDTO> getAllLibros(){
+ public List<libroDto> getAllLibros(){
     return libroService.findAll();
  }
 
  @GetMapping("/{id}")
- public Optional<libroDTO> getLibro(@PathVariable Long id){
-    return libroService.findById(id);
+ public ResponseEntity<Optional<libroDto>> getLibro(@PathVariable Long id){
+    if(libroService.findById(id).isPresent()){
+      return new ResponseEntity<>(libroService.findById(id),HttpStatus.OK);
+    }else{
+      throw new libroException("libro no encontrado");
+    }
+    
  }
 
  @PostMapping
- public ResponseEntity<?> createLibro(@Valid@RequestBody libroDTO libroDto){
+ public ResponseEntity<?> createLibro(@Valid@RequestBody libroDto libroDto){
       libroService.save(libroDto);
-      return ResponseEntity.ok("registro exitoso");
+      return new ResponseEntity<>(HttpStatus.CREATED);
 
  }
 
  @PutMapping("/{id}")
-   public ResponseEntity<?>  updateLibro(@PathVariable Long id,@Valid@RequestBody libroDTO libroDTO){
+   public ResponseEntity<?>  updateLibro(@PathVariable Long id,@Valid@RequestBody libroDto libroDTO){
     libroService.update(id, libroDTO);
     return ResponseEntity.ok("actualizacion exitosa");
  }
@@ -53,19 +60,12 @@ public class libroControlador {
     return ResponseEntity.ok("se elimino con exito");
  }
  @GetMapping("/buscarPorTitulo/{titulo}")
- public Optional<libroDTO> searchLibroByTitulo(@PathVariable String titulo){
-    return libroService.findByTitulo(titulo);
+ public ResponseEntity<Optional<libroDto>> searchLibroByTitulo(@PathVariable String titulo){
+   if(libroService.findByTitulo(titulo).isPresent()){
+      return new ResponseEntity<>(libroService.findByTitulo(titulo),HttpStatus.OK);
+   }else{
+      throw new libroException("libro no encontrado");
+   }
  }
-
- @GetMapping("/buscarPorAutor/{autor}")
- public List<libroDTO> searchLibroByAutor(@PathVariable String autor){
-    return libroService.findByAutor(autor);
- }
-
- @GetMapping("/buscarPorGenero/{genero}")
- public List<libroDTO> searchLibroByGenero(@PathVariable String genero){
-    return libroService.findByGenero(genero);
- }
- 
 
 }

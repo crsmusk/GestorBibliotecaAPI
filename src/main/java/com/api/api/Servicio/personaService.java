@@ -5,38 +5,36 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.api.api.Entidades.DTO.personaDTO;
-
-import com.api.api.Entidades.Entities.persona;
-import com.api.api.Excepciones.personaException;
-import com.api.api.Repositorio.personaRepositorio;
+import com.api.api.Excepciones.Exceptions.personaException;
+import com.api.api.Model.DTO.personaDto;
+import com.api.api.Model.Entities.persona;
+import com.api.api.Repositorio.personaRepository;
+import com.api.api.mapper.personaMapper;
 import com.api.api.persistencia.IpersonaDAO;
 
 @Service
 public class personaService implements IpersonaDAO{
    @Autowired
-   private personaRepositorio personaRepo;
+   private personaRepository personaRepo;
+   @Autowired
+   private personaMapper mapper;
 
    @Override
-   public List<personaDTO> findAll(){
-      List<personaDTO>lista=personaRepo.findAll().stream().map(persona->personaDTO.builder()
-      .nombre(persona.getNombre()).build()).toList();
+   public List<personaDto> findAll(){
+      List<personaDto>lista=mapper.toPersonasDto(personaRepo.findAll());
       return lista;
    }
 
    @Override
-   public Optional<personaDTO> findById(Long id) {
+   public Optional<personaDto> findById(Long id) {
       persona perso=personaRepo.findById(id).orElseThrow(()-> new personaException("no se encontro ala persona"));
-     personaDTO persona=personaDTO.builder()
-     .nombre(perso.getNombre()).build();
+     personaDto persona=mapper.toPersonaDto(perso);
      return Optional.of(persona);
    }
 
    @Override
-   public void save(personaDTO personaDto) {
-      persona persona=new persona();
-      persona.setNombre(personaDto.getNombre());
-      personaRepo.save(persona);
+   public void save(personaDto personaDto) {
+      personaRepo.save(mapper.toPersona(personaDto));
    }
 
    @Override
@@ -45,17 +43,17 @@ public class personaService implements IpersonaDAO{
    }
 
    @Override
-   public Optional<personaDTO> findByNombre(String nombre) {
-     persona perso=personaRepo.findByNombre(nombre).orElseThrow(()-> new personaException("no se econtro ala pesona "+nombre));
-     personaDTO persona=personaDTO.builder()
-     .nombre(perso.getNombre()).build();
+   public Optional<personaDto> findByEmail(String email) {
+     persona perso=personaRepo.findByEmail(email).orElseThrow(()-> new personaException("no se econtro ala persona con el email:"+email));
+     personaDto persona=mapper.toPersonaDto(perso);
      return Optional.of(persona);
    }
 
    @Override
-   public void update(Long id, personaDTO personaDTO) {
+   public void update(Long id, personaDto personaDTO) {
       persona persona=personaRepo.findById(id).orElseThrow(()-> new personaException("no se econtro ala persona con el id"+id));
-      persona.setNombre(personaDTO.getNombre());
+      persona.setEmail(personaDTO.getEmail());
+      persona.setContraseña(personaDTO.getContraseña());
       personaRepo.save(persona);
    }
 

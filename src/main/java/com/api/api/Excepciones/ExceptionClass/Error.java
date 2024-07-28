@@ -1,4 +1,4 @@
-package com.api.api.Excepciones;
+package com.api.api.Excepciones.ExceptionClass;
 
 public class Error {
  private int estado;

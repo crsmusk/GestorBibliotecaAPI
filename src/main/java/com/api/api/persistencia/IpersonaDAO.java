@@ -3,21 +3,19 @@ package com.api.api.persistencia;
 
 import java.util.Optional;
 
-import com.api.api.Entidades.DTO.personaDTO;
-
-
+import com.api.api.Model.DTO.personaDto;
 
 import java.util.List;
 public interface IpersonaDAO {
-   public List<personaDTO> findAll();
+   public List<personaDto> findAll();
 
-   public Optional<personaDTO> findById(Long id);
+   public Optional<personaDto> findById(Long id);
 
-   public void save(personaDTO personadDto);
+   public void save(personaDto personadDto);
 
-    public void update(Long id,personaDTO persona);
+    public void update(Long id,personaDto persona);
    
    public void deleteById(Long id);
 
-   public Optional<personaDTO> findByNombre(String nombre);
+   public Optional<personaDto> findByEmail(String email);
 }

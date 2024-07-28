@@ -4,16 +4,16 @@ package com.api.api.persistencia;
 import java.util.List;
 import java.util.Optional;
 
-import com.api.api.Entidades.DTO.prestamoDTO;
+import com.api.api.Model.DTO.prestamoDto;
 public interface IprestamoDAO {
   
-    public List<prestamoDTO> findAll();
+    public List<prestamoDto> findAll();
 
-    public Optional<prestamoDTO> findById(Long id);
+    public Optional<prestamoDto> findById(Long id);
 
-    public void save(prestamoDTO prestamo);
+    public void save(prestamoDto prestamo);
 
     public void delete(Long id);
 
-    public void update(Long id,prestamoDTO prestamo);
+    public void update(Long id,prestamoDto prestamo);
 }

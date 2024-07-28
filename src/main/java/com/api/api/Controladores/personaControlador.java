@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,36 +16,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.api.Entidades.DTO.personaDTO;
-
+import com.api.api.Excepciones.Exceptions.personaException;
+import com.api.api.Model.DTO.personaDto;
 import com.api.api.Servicio.personaService;
 
 import jakarta.validation.Valid;
-//import com.api.api.Servicio.prestamoService;
-@RequestMapping("/persona")
+@RequestMapping("/personas")
 @RestController
 public class personaControlador {
   @Autowired
   private personaService personaService;
 
   @GetMapping
-  public List<personaDTO>getAllPersona(){
+  public List<personaDto>getAllPersona(){
    return personaService.findAll();
   }
 
   @GetMapping("/{id}")
-  public Optional<personaDTO> getPersona(@PathVariable Long id){
-    return personaService.findById(id);
+  public ResponseEntity<Optional<personaDto>> getPersona(@PathVariable Long id){
+    if(personaService.findById(id).isPresent()){
+      return new ResponseEntity<>(personaService.findById(id),HttpStatus.OK);
+    }else{
+      throw new personaException("persona no encontrada");
+    }
+    
   }
 
   @PostMapping
-  public ResponseEntity<?> createPersona(@Valid@RequestBody personaDTO personaDTO){
+  public ResponseEntity<?> createPersona(@Valid@RequestBody personaDto personaDTO){
      personaService.save(personaDTO);
-     return ResponseEntity.ok("registro exitoso");
+     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updatePersona(@PathVariable Long id,@Valid@RequestBody personaDTO personaDTO){
+  public ResponseEntity<?> updatePersona(@PathVariable Long id,@Valid@RequestBody personaDto personaDTO){
      personaService.update(id, personaDTO);
      return ResponseEntity.ok("se guardaron los cambios con exito");
   }
@@ -54,9 +59,13 @@ public class personaControlador {
      personaService.deleteById(id);
   }
 
-  @GetMapping("/buscarPersona/{nombre}")
-  public Optional<personaDTO> searchPersona(@PathVariable String nombre){
-    return personaService.findByNombre(nombre);
+  @GetMapping("/buscarPersonaPorEmail/{email}")
+  public ResponseEntity<Optional<personaDto>> searchPersona(@PathVariable String email){
+    if(personaService.findByEmail(email).isPresent()){
+      return new ResponseEntity<>(personaService.findByEmail(email),HttpStatus.OK);
+    }else{
+      throw new personaException("persona no encontrada");
+    }
   }
 
 }

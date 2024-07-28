@@ -1,4 +1,4 @@
-package com.api.api.Excepciones;
+package com.api.api.Excepciones.Exceptions;
 
 public class personaException extends RuntimeException{
     public personaException(String mensaje){
