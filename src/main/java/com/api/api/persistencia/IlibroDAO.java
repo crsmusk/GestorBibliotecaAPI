@@ -15,7 +15,11 @@ public interface IlibroDAO {
 
    public void deleteById(Long id);
 
-   public Optional<?> findByTitulo(String titulo);
+   public Optional<libroDto> findByTitulo(String titulo);
+
+   public List<libroDto> BooksAvailable();
+
+   public List<libroDto>BooksNotAvailable();
 
    
 }

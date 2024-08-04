@@ -11,4 +11,5 @@ import java.util.List;
 public interface libroRepository extends JpaRepository<libro,Long > {
    Optional<libro> findByTituloIgnoreCase(String titulo);
    List<libro>findByEstadoTrueOrderByTituloAsc();
+   List<libro>findByEstadoFalseOrderByTituloAsc();
 }

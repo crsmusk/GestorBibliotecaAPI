@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api.api.Excepciones.Exceptions.libroException;
 import com.api.api.Excepciones.Exceptions.libroNoDisponibleException;
@@ -30,22 +31,29 @@ public class prestamoService implements IprestamoDAO {
  private personaRepository personaRepo;
  @Autowired
  private prestamoMapper mapper;
-@Override
+ 
+ 
+ @Override
+ @Transactional(readOnly = true)
 public List<prestamoDto> findAll() {
   List<prestamoDto>lista=mapper.toprestamosDto(prestamoRepo.findAll());
   return lista;
 }
+
 @Override
+@Transactional(readOnly = true)
 public Optional<prestamoDto> findById(Long id) {
   prestamo presta=prestamoRepo.findById(id).orElseThrow(()-> new prestamoException("no se encontro el prestamo"));
   prestamoDto prestamo=mapper.toPrestamoDto(presta);
   return Optional.of(prestamo);
 
 }
+
 @Override
+@Transactional
 public void save(prestamoDto prestamoDTO) {
-   persona persona=personaRepo.findById(prestamoDTO.getPersona().getId()).orElseThrow(()-> new personaException("no se encontro ala persona"));
-   libro libro=libroRepo.findById(prestamoDTO.getLibro().getId()).orElseThrow(()-> new libroException("no se encontro el libro"));
+   persona persona=personaRepo.findByEmail(prestamoDTO.getPersonaDto().getEmail()).orElseThrow(()->new personaException("no se encontro al usuario"));
+   libro libro=libroRepo.findByTituloIgnoreCase(prestamoDTO.getLibroDto().getTitulo()).orElseThrow(()->new libroException("no se encontro el libro"));
    if(libro.isEstado()==false){
      throw new libroNoDisponibleException("libro no disponible");
    }
@@ -54,23 +62,29 @@ public void save(prestamoDto prestamoDTO) {
    prestamo.setLibro(libro);
    prestamo.setPersona(persona);
    prestamo.setFechaDePrestamo(prestamoDTO.getFechaDePrestamo());
+   prestamo.setFechaDeEntrega(prestamoDTO.getFechaDeEntrega());
    prestamoRepo.save(prestamo);
    
 }
+
 @Override
+@Transactional
 public void delete(Long id) {
   prestamoRepo.deleteById(id);
 }
+
 @Override
+@Transactional
 public void update(Long id, prestamoDto prestamoDTO) {
    prestamo prestamo=prestamoRepo.findById(id).orElseThrow(()-> new prestamoException("no se econtro el prestamo con el id "+id));
-    persona persona=personaRepo.findById(prestamoDTO.getPersona().getId()).orElseThrow(()-> new personaException("no se econtro ala persona"));
-    libro libro=libroRepo.findById(prestamoDTO.getLibro().getId()).orElseThrow(()-> new libroException("no se encontro el libro"));
+    persona persona=personaRepo.findByEmail(prestamoDTO.getPersonaDto().getEmail()).orElseThrow(()->new personaException("no se encontro al usuario con el correo"+prestamoDTO.getPersonaDto().getEmail()));
+    libro libro=libroRepo.findByTituloIgnoreCase(prestamoDTO.getLibroDto().getTitulo()).orElseThrow(()->new libroException("no se econtro el libro con el titulo"+prestamoDTO.getLibroDto().getTitulo()));
     
     libro.setEstado(false);
     prestamo.setLibro(libro);
     prestamo.setPersona(persona);
     prestamo.setFechaDePrestamo(prestamoDTO.getFechaDePrestamo());
+    prestamo.setFechaDeEntrega(prestamoDTO.getFechaDeEntrega());
     prestamoRepo.save(prestamo);
 }
 

@@ -4,9 +4,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.api.Excepciones.Exceptions.autorException;
+import com.api.api.Excepciones.Exceptions.generoException;
 import com.api.api.Excepciones.Exceptions.libroException;
 import com.api.api.Model.DTO.libroDto;
+import com.api.api.Model.Entities.autor;
+import com.api.api.Model.Entities.genero;
 import com.api.api.Model.Entities.libro;
+import com.api.api.Repositorio.autorRepository;
+import com.api.api.Repositorio.generoRepository;
 import com.api.api.Repositorio.libroRepository;
 import com.api.api.mapper.libroMapper;
 import com.api.api.persistencia.IlibroDAO;
@@ -17,6 +23,10 @@ public class libroService implements IlibroDAO {
    private libroRepository libroRepo;
    @Autowired
    private libroMapper mapper;
+   @Autowired
+   private autorRepository autorRepo;
+   @Autowired
+   private generoRepository generoRepo;
 
    @Override
    public List<libroDto> findAll() {
@@ -33,7 +43,14 @@ public class libroService implements IlibroDAO {
 
    @Override
    public void save(libroDto librodDto) {
-    libroRepo.save(mapper.libro(librodDto));
+    genero genero=generoRepo.findByNombreGeneroIgnoreCase(librodDto.getNombreGenero()).orElseThrow(()->new generoException());
+    autor autor=autorRepo.findByNombreIgnoreCase(librodDto.getNombreAutor()).orElseThrow(()->new autorException());
+    libro libro =new libro();
+    libro.setTitulo(librodDto.getTitulo());
+    libro.setEstado(librodDto.isEstado());
+    libro.setGenero(genero);
+    libro.setAutor(autor);
+    libroRepo.save(libro);
    }
 
    @Override
@@ -52,18 +69,33 @@ public class libroService implements IlibroDAO {
         throw new libroException("no se encontro el libro");
        }
    }
+
+   
    @Override
    public void update(Long id, libroDto libroDTO) {
     Optional<libro>libroOpional=libroRepo.findById(id);
+    genero genero=generoRepo.findByNombreGeneroIgnoreCase(libroDTO.getNombreGenero()).orElseThrow(()->new generoException());
+    autor autor=autorRepo.findByNombreIgnoreCase(libroDTO.getNombreAutor()).orElseThrow(()->new autorException());
+
     if(libroOpional.isPresent()){
       libro libro=libroOpional.get();
       libro.setTitulo(libroDTO.getTitulo());
-      libro.setAutor(libroDTO.getAutor());
-      libro.setGenero(libroDTO.getGenero());
+      libro.setAutor(autor);
+      libro.setGenero(genero);
       libro.setEstado(libroDTO.isEstado());
       libroRepo.save(libro);
     }else{
       throw new libroException("no se encontro el libro");
     }
    }
+
+  @Override
+  public List<libroDto> BooksAvailable() {
+    return mapper.tolibrosDto(libroRepo.findByEstadoTrueOrderByTituloAsc());
+  }
+
+  @Override
+  public List<libroDto> BooksNotAvailable() {
+    return mapper.tolibrosDto(libroRepo.findByEstadoFalseOrderByTituloAsc());
+  }
 }

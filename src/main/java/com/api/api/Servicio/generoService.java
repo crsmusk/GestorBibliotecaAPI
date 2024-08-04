@@ -26,7 +26,7 @@ public List<generoDto> findAll() {
 }
 @Override
 public Optional<generoDto> findById(Long id) {
-    genero gender=generoRepo.findById(id).orElseThrow(()->new RuntimeException());
+    genero gender=generoRepo.findById(id).orElseThrow(()->new generoException());
     generoDto genero=mapper.toGeneroDto(gender);
     return Optional.of(genero);
 }
@@ -40,6 +40,7 @@ public Optional<generoDto> findByNombre(String nombreGenero) {
 public void update(Long id, generoDto generoDto) {
     genero gender=generoRepo.findById(id).orElseThrow(()->new RuntimeException());
     gender.setNombreGenero(generoDto.getNombreGenero());
+    generoRepo.save(gender);
 }
 @Override
 public void save(generoDto generoDto) {

@@ -1,4 +1,5 @@
 package com.api.api.Model.DTO;
+
 import com.api.api.Model.Entities.autor;
 import com.api.api.Model.Entities.genero;
 
@@ -17,6 +18,7 @@ import lombok.Setter;
 public class libroDto {
     private String titulo;
     private boolean estado;
-    private autor autor;
-    private genero genero; 
+    private String nombreAutor;
+    private String nombreGenero; 
+    
 }

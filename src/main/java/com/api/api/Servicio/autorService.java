@@ -40,6 +40,7 @@ public Optional<autorDto> findByNombre(String nombre) {
 public void update(Long id, autorDto autorDto) {
     autor author=autorRepo.findById(id).orElseThrow(()->new autorException());
     author.setNombre(autorDto.getNombre());
+    autorRepo.save(author);
 }
 @Override
 public void save(autorDto autorDto) {

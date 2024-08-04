@@ -41,6 +41,24 @@ public class libroControlador {
     
  }
 
+ @GetMapping("/librosDisponibles")
+ public ResponseEntity<List<libroDto>> librosAvailable(){
+   if(libroService.BooksAvailable().isEmpty()){
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   }else{
+      return new ResponseEntity<>(libroService.BooksAvailable(),HttpStatus.OK);
+   }
+ }
+
+ @GetMapping("/librosNoDisponibles")
+ public ResponseEntity<List<libroDto>>librosNoAvailable(){
+   if(libroService.BooksNotAvailable().isEmpty()){
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   }else{
+      return new ResponseEntity<>(libroService.BooksNotAvailable(),HttpStatus.OK);
+   }
+ }
+
  @PostMapping
  public ResponseEntity<?> createLibro(@Valid@RequestBody libroDto libroDto){
       libroService.save(libroDto);
