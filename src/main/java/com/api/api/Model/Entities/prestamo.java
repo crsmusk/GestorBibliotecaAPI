@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-//import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +28,7 @@ public class prestamo {
  private Long id;
     private LocalDate fechaDePrestamo;
     private LocalDate fechaDeEntrega;
- @ManyToOne
+ @OneToOne
  @JoinColumn(name="libro_id")
  libro libro;
  

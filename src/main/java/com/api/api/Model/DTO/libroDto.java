@@ -1,7 +1,6 @@
 package com.api.api.Model.DTO;
 
-import com.api.api.Model.Entities.autor;
-import com.api.api.Model.Entities.genero;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

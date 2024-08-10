@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.Optional;
 
-
+//import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,7 +22,7 @@ import com.api.api.Model.DTO.prestamoDto;
 
 import com.api.api.Repositorio.prestamoRepository;
 
-//se  crean de antemano datos en la base de datos para poder testear mas facilmente el servicio de prestamo
+//se  crean de antemano los datos en la base de datos para poder testear mas facilmente el servicio de prestamo
 import com.api.api.Servicio.prestamoService;
 
 @SpringBootTest
@@ -35,7 +35,29 @@ public class prestamoServiceTest {
     prestamoService prestamoService;
     @Autowired
     prestamoRepository prestamoRepo;
-   
+    
+     /*@BeforeEach
+    public void setUp(){
+        persona=new personaDto();
+        persona.setEmail("pepe@Gmail.com");
+        persona.setContraseña("madara123");
+
+        libro=new libroDto();
+        libro.setTitulo("el mecanico legendario");
+        libro.setEstado(true);
+        libro.setNombreAutor("kim jun");
+        libro.setNombreGenero("fantasia");
+
+        prestamoDtoEsperado=new prestamoDto();
+        prestamoDtoEsperado.setFechaDePrestamo(LocalDate.now());
+        prestamoDtoEsperado.setFechaDeEntrega(LocalDate.of(2017, 10, 15));
+        prestamoDtoEsperado.setLibroDto(libro);
+        prestamoDtoEsperado.setPersonaDto(persona);
+        personaService.save(persona);
+        libroService.save(libro);
+        prestamoService.save(prestamoDtoEsperado);
+        
+    }*/
     
 
     
