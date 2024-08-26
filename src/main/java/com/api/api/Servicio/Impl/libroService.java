@@ -1,4 +1,4 @@
-package com.api.api.Servicio;
+package com.api.api.Servicio.Impl;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,11 @@ import com.api.api.Model.Entities.libro;
 import com.api.api.Repositorio.autorRepository;
 import com.api.api.Repositorio.generoRepository;
 import com.api.api.Repositorio.libroRepository;
+import com.api.api.Servicio.Interface.Ilibro;
 import com.api.api.mapper.libroMapper;
-import com.api.api.persistencia.IlibroDAO;
 
 @Service
-public class libroService implements IlibroDAO {
+public class libroService implements Ilibro {
    @Autowired
    private libroRepository libroRepo;
    @Autowired

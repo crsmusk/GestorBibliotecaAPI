@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.api.api.Excepciones.Exceptions.generoException;
 import com.api.api.Model.DTO.generoDto;
 import com.api.api.Repositorio.generoRepository;
-import com.api.api.Servicio.generoService;
+import com.api.api.Servicio.Impl.generoService;
 
 @SpringBootTest
 public class generoServiceTest {

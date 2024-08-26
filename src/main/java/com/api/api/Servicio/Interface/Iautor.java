@@ -1,11 +1,11 @@
-package com.api.api.persistencia;
+package com.api.api.Servicio.Interface;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.api.api.Model.DTO.autorDto;
 
-public interface IautorDAO {
+public interface Iautor {
   public List<autorDto>findAll();
   public Optional<autorDto>findById(Long id);
   public Optional<autorDto>findByNombre(String nombre);

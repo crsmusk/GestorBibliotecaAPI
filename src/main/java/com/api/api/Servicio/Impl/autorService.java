@@ -1,4 +1,4 @@
-package com.api.api.Servicio;
+package com.api.api.Servicio.Impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +10,11 @@ import com.api.api.Excepciones.Exceptions.autorException;
 import com.api.api.Model.DTO.autorDto;
 import com.api.api.Model.Entities.autor;
 import com.api.api.Repositorio.autorRepository;
+import com.api.api.Servicio.Interface.Iautor;
 import com.api.api.mapper.autorMapper;
-import com.api.api.persistencia.IautorDAO;
 
 @Service
-public class autorService implements IautorDAO{
+public class autorService implements Iautor{
  @Autowired
  private autorRepository autorRepo;
  @Autowired

@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.api.api.Servicio.Impl.prestamoService;
 import com.api.api.Excepciones.Exceptions.prestamoException;
 import com.api.api.Model.DTO.prestamoDto;
-import com.api.api.Servicio.prestamoService;
-
 import jakarta.validation.Valid;
 @RequestMapping("/prestamos")
 @RestController

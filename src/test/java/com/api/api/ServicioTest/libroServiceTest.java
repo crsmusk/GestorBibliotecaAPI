@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.api.api.Excepciones.Exceptions.libroException;
 import com.api.api.Model.DTO.libroDto;
 import com.api.api.Repositorio.libroRepository;
-import com.api.api.Servicio.libroService;
+import com.api.api.Servicio.Impl.libroService; 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

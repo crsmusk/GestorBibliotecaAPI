@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.api.api.Excepciones.Exceptions.autorException;
 import com.api.api.Model.DTO.autorDto;
 import com.api.api.Repositorio.autorRepository;
-import com.api.api.Servicio.autorService;
+import com.api.api.Servicio.Impl.autorService;
 
 @SpringBootTest
 public class autorServiceTest {

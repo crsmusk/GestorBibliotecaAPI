@@ -1,9 +1,9 @@
-package com.api.api.persistencia;
+package com.api.api.Servicio.Interface;
 import java.util.List;
 import java.util.Optional;
 
 import com.api.api.Model.DTO.libroDto;
-public interface IlibroDAO {
+public interface Ilibro {
 
    public List<libroDto>findAll();
 

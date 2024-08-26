@@ -1,4 +1,4 @@
-package com.api.api.Servicio;
+package com.api.api.Servicio.Impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +18,11 @@ import com.api.api.Model.Entities.prestamo;
 import com.api.api.Repositorio.libroRepository;
 import com.api.api.Repositorio.personaRepository;
 import com.api.api.Repositorio.prestamoRepository;
+import com.api.api.Servicio.Interface.Iprestamo;
 import com.api.api.mapper.prestamoMapper;
-import com.api.api.persistencia.IprestamoDAO;
 
 @Service
-public class prestamoService implements IprestamoDAO {
+public class prestamoService implements Iprestamo {
  @Autowired
  private prestamoRepository prestamoRepo;
  @Autowired

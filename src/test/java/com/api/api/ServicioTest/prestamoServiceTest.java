@@ -23,7 +23,7 @@ import com.api.api.Model.DTO.prestamoDto;
 import com.api.api.Repositorio.prestamoRepository;
 
 //se  crean de antemano los datos en la base de datos para poder testear mas facilmente el servicio de prestamo
-import com.api.api.Servicio.prestamoService;
+import com.api.api.Servicio.Impl.prestamoService;
 
 @SpringBootTest
 public class prestamoServiceTest {

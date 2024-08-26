@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.api.api.Excepciones.Exceptions.personaException;
 import com.api.api.Model.DTO.personaDto;
 import com.api.api.Repositorio.personaRepository;
-import com.api.api.Servicio.personaService;
+import com.api.api.Servicio.Impl.personaService;
 
 @SpringBootTest
 public class personaServiceTest {

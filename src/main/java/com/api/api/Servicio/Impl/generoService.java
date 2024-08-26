@@ -1,4 +1,4 @@
-package com.api.api.Servicio;
+package com.api.api.Servicio.Impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +10,11 @@ import com.api.api.Excepciones.Exceptions.generoException;
 import com.api.api.Model.DTO.generoDto;
 import com.api.api.Model.Entities.genero;
 import com.api.api.Repositorio.generoRepository;
+import com.api.api.Servicio.Interface.Igenero;
 import com.api.api.mapper.generoMapper;
-import com.api.api.persistencia.IgeneroDAO;
 
 @Service
-public class generoService implements IgeneroDAO{
+public class generoService implements Igenero{
   @Autowired
   private generoRepository generoRepo;
   @Autowired

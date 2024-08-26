@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.api.api.Servicio.Impl.personaService;
 import com.api.api.Excepciones.Exceptions.personaException;
 import com.api.api.Model.DTO.personaDto;
-import com.api.api.Servicio.personaService;
-
 import jakarta.validation.Valid;
 @RequestMapping("/personas")
 @RestController

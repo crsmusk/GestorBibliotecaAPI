@@ -1,11 +1,11 @@
-package com.api.api.persistencia;
+package com.api.api.Servicio.Interface;
 
 
 import java.util.List;
 import java.util.Optional;
 
 import com.api.api.Model.DTO.prestamoDto;
-public interface IprestamoDAO {
+public interface Iprestamo {
   
     public List<prestamoDto> findAll();
 

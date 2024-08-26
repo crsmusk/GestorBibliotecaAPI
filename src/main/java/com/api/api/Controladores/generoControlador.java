@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.api.Excepciones.Exceptions.generoException;
 import com.api.api.Model.DTO.generoDto;
-import com.api.api.Servicio.generoService;
+import com.api.api.Servicio.Impl.generoService;
 
 @RestController
 @RequestMapping("/generos")

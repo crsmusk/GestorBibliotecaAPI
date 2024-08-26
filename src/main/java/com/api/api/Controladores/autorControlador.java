@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.api.Excepciones.Exceptions.autorException;
 import com.api.api.Model.DTO.autorDto;
-import com.api.api.Servicio.autorService;
+import com.api.api.Servicio.Impl.autorService;
 
 @RestController
 @RequestMapping("/autores")

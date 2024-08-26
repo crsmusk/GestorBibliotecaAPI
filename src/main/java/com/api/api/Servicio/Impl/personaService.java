@@ -1,4 +1,4 @@
-package com.api.api.Servicio;
+package com.api.api.Servicio.Impl;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,11 +9,11 @@ import com.api.api.Excepciones.Exceptions.personaException;
 import com.api.api.Model.DTO.personaDto;
 import com.api.api.Model.Entities.persona;
 import com.api.api.Repositorio.personaRepository;
+import com.api.api.Servicio.Interface.Ipersona;
 import com.api.api.mapper.personaMapper;
-import com.api.api.persistencia.IpersonaDAO;
 
 @Service
-public class personaService implements IpersonaDAO{
+public class personaService implements Ipersona{
    @Autowired
    private personaRepository personaRepo;
    @Autowired

@@ -1,4 +1,4 @@
-package com.api.api.persistencia;
+package com.api.api.Servicio.Interface;
 
 
 import java.util.Optional;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.api.api.Model.DTO.personaDto;
 
 import java.util.List;
-public interface IpersonaDAO {
+public interface Ipersona {
    public List<personaDto> findAll();
 
    public Optional<personaDto> findById(Long id);
