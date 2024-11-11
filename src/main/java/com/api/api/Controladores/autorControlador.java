@@ -29,21 +29,15 @@ public class autorControlador {
  public List<autorDto>getAll(){
     return autorService.findAll();
  }
- @GetMapping("/{id}")
- public ResponseEntity<Optional<autorDto>>getById(@PathVariable Long id){
-    if(autorService.findById(id).isPresent()){
+ @GetMapping("/buscar-autor-por-id/{id}")
+ public ResponseEntity<autorDto>getById(@PathVariable Long id){
+    
         return new ResponseEntity<>(autorService.findById(id),HttpStatus.OK);
-    }else{
-        throw new autorException();
-    }
+    
  }
- @GetMapping("/buscarAutor/{nombre}")
- public ResponseEntity<Optional<autorDto>>getByNombre(@PathVariable String nombre){
-    if(autorService.findByNombre(nombre).isPresent()){
+ @GetMapping("/buscar-autor-por-nombre/{nombre}")
+ public ResponseEntity<autorDto>getByNombre(@PathVariable String nombre){
         return new ResponseEntity<>(autorService.findByNombre(nombre),HttpStatus.OK);
-    }else{
-        throw new autorException();
-    }
  }
  @PostMapping
  public ResponseEntity<?>save(@RequestBody autorDto autorDto){

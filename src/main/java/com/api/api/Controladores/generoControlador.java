@@ -30,22 +30,15 @@ public List<generoDto>getAll(){
     return generoService.findAll();
 }
 
-@GetMapping("/{id}")
-public ResponseEntity<Optional<generoDto>>getById(@PathVariable Long id){
-    if(generoService.findById(id).isPresent()){
-        return new ResponseEntity<>(generoService.findById(id),HttpStatus.OK);
-    }else{
-        throw new generoException();
-    }
+@GetMapping("buscar-genero-por-id/{id}")
+public ResponseEntity<generoDto>getById(@PathVariable Long id){
+    
+     return new ResponseEntity<>(generoService.findById(id),HttpStatus.OK);
 }
 
-@GetMapping("/BuscarGenero/{nombre}")
-public ResponseEntity<Optional<generoDto>>getByNombre(@PathVariable String nombre){
-    if(generoService.findByNombre(nombre).isPresent()){
+@GetMapping("/buscar-genero-por-nombre/{nombre}")
+public ResponseEntity<generoDto>getByNombre(@PathVariable String nombre){
         return new ResponseEntity<>(generoService.findByNombre(nombre),HttpStatus.OK);
-    }else{
-        throw new generoException();
-    }
 }
 
 @PutMapping("/{id}")
