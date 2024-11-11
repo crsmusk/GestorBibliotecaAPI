@@ -1,7 +1,7 @@
 package com.api.api.Model.DTO;
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.Setter;
 public class prestamoDto {
    private LocalDate fechaDePrestamo;
    private LocalDate fechaDeEntrega;
-   private libroDto libroDto;
-   private personaDto personaDto;
+   private List<String> nombreLibro;
+   private String emailCliente;
 
 }

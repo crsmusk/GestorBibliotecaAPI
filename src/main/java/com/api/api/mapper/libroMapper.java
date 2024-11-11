@@ -1,5 +1,6 @@
 package com.api.api.mapper;
 
+import com.api.api.Model.Entities.genero;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class libroMapper {
         return libroDto.builder()
         .titulo(libro.getTitulo())
         .estado(libro.isEstado())
-        .nombreGenero(libro.getGenero().getNombreGenero())
+        .nombreGenero(libro.getGenero().stream().map(genero::getNombreGenero).toList())
         .nombreAutor(libro.getAutor().getNombre())
         .build();
     }

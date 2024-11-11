@@ -2,19 +2,15 @@ package com.api.api.Model.Entities;
 
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.OneToOne;
+
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,14 +24,14 @@ public class libro {
  private Long id;
  private String titulo;
  private boolean estado;
- @OneToOne(mappedBy = "libro")
+ @ManyToOne
+ @JoinColumn(name = "prestamo_id")
  private prestamo prestamo;
  @ManyToOne
  @JoinColumn(name = "autor_id")
  private autor autor;
- @ManyToOne
- @JoinColumn(name = "genero_id")
- private genero genero;
+ @ManyToMany
+ private List<genero> genero;
  
  
 

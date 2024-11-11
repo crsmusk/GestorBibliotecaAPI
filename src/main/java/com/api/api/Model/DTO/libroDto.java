@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,6 +21,6 @@ public class libroDto {
     private String titulo;
     private boolean estado;
     private String nombreAutor;
-    private String nombreGenero; 
+    private List<String> nombreGenero;
     
 }

@@ -2,12 +2,7 @@ package com.api.api.Model.Entities;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -25,6 +20,11 @@ public class genero {
   private Long id;
     @Column(name = "nombre_genero",unique = true)
   private String nombreGenero;
-  @OneToMany(mappedBy = "genero")
+  @ManyToMany
+  @JoinTable(
+          name = "genero_libro",
+          joinColumns = @JoinColumn(name = "genero_id"),
+          inverseJoinColumns = @JoinColumn(name = "libro_id")
+  )
   private List<libro>libros;
 }
