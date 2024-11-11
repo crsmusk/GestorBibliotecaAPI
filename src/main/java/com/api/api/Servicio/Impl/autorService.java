@@ -3,6 +3,7 @@ package com.api.api.Servicio.Impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.api.api.Excepciones.Exceptions.noHayContenidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +22,23 @@ public class autorService implements Iautor{
  private autorMapper mapper;
 @Override
 public List<autorDto> findAll() {
-    List<autorDto>autores=mapper.toAutoresDto(autorRepo.findAll());
-    return autores;
+    List<autor>autores=autorRepo.findAll();
+    if (autores.isEmpty()) {
+        throw new noHayContenidoException();
+    }
+    return mapper.toAutoresDto(autores);
 }
 @Override
-public Optional<autorDto> findById(Long id) {
+public autorDto findById(Long id) {
     autor author=autorRepo.findById(id).orElseThrow(()->new autorException());
     autorDto autor=mapper.toAutorDto(author);
-    return Optional.of(autor);
+    return autor;
 }
 @Override
-public Optional<autorDto> findByNombre(String nombre) {
+public autorDto findByNombre(String nombre) {
     autor author=autorRepo.findByNombreIgnoreCase(nombre).orElseThrow(()->new autorException());
     autorDto autor=mapper.toAutorDto(author);
-    return Optional.of(autor);
+    return autor;
 }
 @Override
 public void update(Long id, autorDto autorDto) {

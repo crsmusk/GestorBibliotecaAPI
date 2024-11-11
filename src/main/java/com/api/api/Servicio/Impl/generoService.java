@@ -3,6 +3,7 @@ package com.api.api.Servicio.Impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.api.api.Excepciones.Exceptions.noHayContenidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,26 +20,31 @@ public class generoService implements Igenero{
   private generoRepository generoRepo;
   @Autowired
   private generoMapper mapper;
+
+
 @Override
 public List<generoDto> findAll() {
-    List<generoDto>generos=mapper.toGenerosDto(generoRepo.findAll());
-    return generos;
+    List<genero>generos=generoRepo.findAll();
+    if (generos.isEmpty()) {
+        throw new noHayContenidoException();
+    }
+    return mapper.toGenerosDto(generos);
 }
 @Override
-public Optional<generoDto> findById(Long id) {
+public generoDto findById(Long id) {
     genero gender=generoRepo.findById(id).orElseThrow(()->new generoException());
     generoDto genero=mapper.toGeneroDto(gender);
-    return Optional.of(genero);
+    return genero;
 }
 @Override
-public Optional<generoDto> findByNombre(String nombreGenero) {
+public generoDto findByNombre(String nombreGenero) {
    genero gender=generoRepo.findByNombreGeneroIgnoreCase(nombreGenero).orElseThrow(()->new generoException());
    generoDto genero=mapper.toGeneroDto(gender);
-   return Optional.of(genero);
+   return genero;
 }
 @Override
 public void update(Long id, generoDto generoDto) {
-    genero gender=generoRepo.findById(id).orElseThrow(()->new RuntimeException());
+    genero gender=generoRepo.findById(id).orElseThrow(()->new generoException());
     gender.setNombreGenero(generoDto.getNombreGenero());
     generoRepo.save(gender);
 }
@@ -48,6 +54,11 @@ public void save(generoDto generoDto) {
 }
 @Override
 public void delete(Long id) {
-    generoRepo.deleteById(id);
+    if (generoRepo.existsById(id)) {
+         generoRepo.deleteById(id);
+    }else{
+        throw new generoException();
+    }
 }
+   
 }
