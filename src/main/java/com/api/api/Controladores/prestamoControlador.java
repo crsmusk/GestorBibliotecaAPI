@@ -1,20 +1,12 @@
 package com.api.api.Controladores;
 
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.api.api.Servicio.Impl.prestamoService;
-import com.api.api.Excepciones.Exceptions.prestamoException;
 import com.api.api.Model.DTO.prestamoDto;
 import jakarta.validation.Valid;
 @RequestMapping("/prestamos")
@@ -29,12 +21,8 @@ public class prestamoControlador {
    }
 
    @GetMapping("/{id}")
-   public ResponseEntity<Optional<prestamoDto>> getPrestamo(@PathVariable Long id){
-    if(prestamoService.findById(id).isPresent()){
+   public ResponseEntity<prestamoDto> getPrestamo(@PathVariable Long id){
       return new ResponseEntity<>(prestamoService.findById(id),HttpStatus.OK);
-    }else{
-      throw new prestamoException("prestamo no encontrado");
-    }
    }
 
    @PostMapping
@@ -43,9 +31,9 @@ public class prestamoControlador {
      return new ResponseEntity<>(HttpStatus.CREATED);
    }
 
-   @PutMapping("/{id}")
-   public ResponseEntity<?> updatePrestamo(@PathVariable Long id,@Valid@RequestBody prestamoDto prestamoDTO){
-     prestamoService.update(id, prestamoDTO);
+   @PatchMapping("/agregar-libro/{id}/{titulo}")
+   public ResponseEntity<?> addBook(@PathVariable Long id, @PathVariable String titulo){
+     prestamoService.addBook(id, titulo);
      return ResponseEntity.ok("se actualizaron los datos de forma exitosa");
    }
 
@@ -54,6 +42,21 @@ public class prestamoControlador {
     prestamoService.delete(id);
     return new ResponseEntity<>(HttpStatus.OK);
    }
-   
+
+   @PatchMapping("/devolver-libro/{id}/{titulo}")
+    public ResponseEntity<?>returnBook(@PathVariable Long id,@PathVariable String titulo){
+       prestamoService.returnBook(id,titulo);
+       return new ResponseEntity<>(HttpStatus.OK);
+   }
+
+   @GetMapping("/prestamos-atrasados")
+    public ResponseEntity<List<prestamoDto>>lateLoans(){
+       return new ResponseEntity<>(prestamoService.lateLoans(),HttpStatus.OK);
+   }
+
+   @GetMapping("/prestamos-pendientes")
+    public ResponseEntity<?>getLeansEarrings(){
+       return new ResponseEntity<>(prestamoService.loansEarrings(),HttpStatus.OK);
+   }
 
 }

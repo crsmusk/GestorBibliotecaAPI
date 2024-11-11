@@ -30,17 +30,13 @@ public class libroControlador {
     return libroService.findAll();
  }
 
- @GetMapping("/{id}")
- public ResponseEntity<Optional<libroDto>> getLibro(@PathVariable Long id){
-    if(libroService.findById(id).isPresent()){
-      return new ResponseEntity<>(libroService.findById(id),HttpStatus.OK);
-    }else{
-      throw new libroException("libro no encontrado");
-    }
+ @GetMapping("/buscar-libro-por-id/{id}")
+ public ResponseEntity<libroDto> getLibro(@PathVariable Long id){
     
+      return new ResponseEntity<>(libroService.findById(id),HttpStatus.OK);
  }
 
- @GetMapping("/librosDisponibles")
+ @GetMapping("/libros-disponibles")
  public ResponseEntity<List<libroDto>> librosAvailable(){
    if(libroService.BooksAvailable().isEmpty()){
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -49,13 +45,23 @@ public class libroControlador {
    }
  }
 
- @GetMapping("/librosNoDisponibles")
+ @GetMapping("/buscar-libros-por-autor/{autor}")
+ public ResponseEntity<List<libroDto>>getByAutor(@PathVariable String autor){
+     return new ResponseEntity<>(libroService.findByAuthor(autor),HttpStatus.OK);
+ }
+
+ @GetMapping("/libros-no-disponibles")
  public ResponseEntity<List<libroDto>>librosNoAvailable(){
    if(libroService.BooksNotAvailable().isEmpty()){
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
    }else{
       return new ResponseEntity<>(libroService.BooksNotAvailable(),HttpStatus.OK);
    }
+ }
+
+ @GetMapping("/buscar-libros-por-genero/{genero}")
+ public ResponseEntity<List<libroDto>>getByGenero(@PathVariable String genero){
+     return new ResponseEntity<>(libroService.findByGender(genero),HttpStatus.OK);
  }
 
  @PostMapping
@@ -76,13 +82,9 @@ public class libroControlador {
     libroService.deleteById(id);
     return ResponseEntity.ok("se elimino con exito");
  }
- @GetMapping("/buscarPorTitulo/{titulo}")
- public ResponseEntity<Optional<libroDto>> searchLibroByTitulo(@PathVariable String titulo){
-   if(libroService.findByTitulo(titulo).isPresent()){
+ @GetMapping("/buscar-por-titulo/{titulo}")
+ public ResponseEntity<libroDto> searchLibroByTitulo(@PathVariable String titulo){
       return new ResponseEntity<>(libroService.findByTitulo(titulo),HttpStatus.OK);
-   }else{
-      throw new libroException("libro no encontrado");
-   }
  }
 
 }
