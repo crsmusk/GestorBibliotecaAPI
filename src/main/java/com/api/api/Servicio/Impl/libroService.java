@@ -1,6 +1,9 @@
 package com.api.api.Servicio.Impl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.api.api.Excepciones.Exceptions.noHayContenidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,41 +33,50 @@ public class libroService implements Ilibro {
 
    @Override
    public List<libroDto> findAll() {
-      List<libroDto> libroList = mapper.tolibrosDto(libroRepo.findAll());
-      return libroList;
+      List<libro>libro=libroRepo.findAll();
+      if (libro.isEmpty()) {
+        throw new noHayContenidoException();
+      }
+      return mapper.tolibrosDto(libro);
   }
 
    @Override
-   public Optional<libroDto> findById(Long id) {
+   public libroDto findById(Long id) {
      libro libro=libroRepo.findById(id).orElseThrow(()-> new libroException("libro no encontrado"+id));
      libroDto librito=mapper.toLibroDto(libro);
-     return Optional.of(librito);
+     return librito;
    }
 
    @Override
    public void save(libroDto librodDto) {
-    genero genero=generoRepo.findByNombreGeneroIgnoreCase(librodDto.getNombreGenero()).orElseThrow(()->new generoException());
+       List<genero>generos=librodDto.getNombreGenero().
+               stream().map(nombreGenero-> generoRepo.findByNombreGeneroIgnoreCase(nombreGenero).orElseThrow(()->new generoException()))
+               .toList();
     autor autor=autorRepo.findByNombreIgnoreCase(librodDto.getNombreAutor()).orElseThrow(()->new autorException());
     libro libro =new libro();
     libro.setTitulo(librodDto.getTitulo());
     libro.setEstado(librodDto.isEstado());
-    libro.setGenero(genero);
+    libro.setGenero(generos);
     libro.setAutor(autor);
     libroRepo.save(libro);
    }
 
    @Override
    public void deleteById(Long id) {
-     libroRepo.deleteById(id);
+    if (libroRepo.existsById(id)) {
+       libroRepo.deleteById(id);
+    }else{
+      throw new libroException("no se encontro el libro con el id"+id);
+    }
    }
 
    @Override
-   public Optional<libroDto>findByTitulo(String titulo) {
+   public libroDto findByTitulo(String titulo) {
        Optional<libro>libroOptional=libroRepo.findByTituloIgnoreCase(titulo);
        if(libroOptional.isPresent()){
          libro Libro=libroOptional.get();
          libroDto libro=mapper.toLibroDto(Libro);
-         return Optional.of(libro);
+         return libro;
        }else{
         throw new libroException("no se encontro el libro");
        }
@@ -73,15 +85,18 @@ public class libroService implements Ilibro {
    
    @Override
    public void update(Long id, libroDto libroDTO) {
-    Optional<libro>libroOpional=libroRepo.findById(id);
-    genero genero=generoRepo.findByNombreGeneroIgnoreCase(libroDTO.getNombreGenero()).orElseThrow(()->new generoException());
-    autor autor=autorRepo.findByNombreIgnoreCase(libroDTO.getNombreAutor()).orElseThrow(()->new autorException());
+     Optional<libro>libroOpional=libroRepo.findById(id);
 
+     List<genero>generos=libroDTO.getNombreGenero()
+             .stream().map(genero->generoRepo.findByNombreGeneroIgnoreCase(genero).orElseThrow(()->new generoException()))
+             .toList();
+
+     autor autor=autorRepo.findByNombreIgnoreCase(libroDTO.getNombreAutor()).orElseThrow(()->new autorException());
     if(libroOpional.isPresent()){
       libro libro=libroOpional.get();
       libro.setTitulo(libroDTO.getTitulo());
       libro.setAutor(autor);
-      libro.setGenero(genero);
+      libro.setGenero(generos);
       libro.setEstado(libroDTO.isEstado());
       libroRepo.save(libro);
     }else{
@@ -91,11 +106,31 @@ public class libroService implements Ilibro {
 
   @Override
   public List<libroDto> BooksAvailable() {
+    List<libro>libros=libroRepo.findByEstadoTrueOrderByTituloAsc();
+    if (libros.isEmpty()) {
+      throw new noHayContenidoException();
+    }
     return mapper.tolibrosDto(libroRepo.findByEstadoTrueOrderByTituloAsc());
   }
 
   @Override
   public List<libroDto> BooksNotAvailable() {
-    return mapper.tolibrosDto(libroRepo.findByEstadoFalseOrderByTituloAsc());
+    List<libro>libros=libroRepo.findByEstadoFalseOrderByTituloAsc();
+    if (libros.isEmpty()) {
+      throw new noHayContenidoException();
+    }
+    return mapper.tolibrosDto(libros);
   }
+
+    @Override
+    public List<libroDto> findByAuthor(String autor) {
+      autor autor1=autorRepo.findByNombreIgnoreCase(autor).orElseThrow(()->new autorException());
+      return mapper.tolibrosDto(autor1.getLibros());
+    }
+
+    @Override
+    public List<libroDto> findByGender(String genero) {
+       genero genero1=generoRepo.findByNombreGeneroIgnoreCase(genero).orElseThrow(()->new generoException());
+       return mapper.tolibrosDto(genero1.getLibros());
+    }
 }
