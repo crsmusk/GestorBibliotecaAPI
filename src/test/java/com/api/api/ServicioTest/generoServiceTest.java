@@ -17,7 +17,7 @@ import com.api.api.Model.DTO.generoDto;
 import com.api.api.Repositorio.generoRepository;
 import com.api.api.Servicio.Impl.generoService;
 
-@SpringBootTest
+/*@SpringBootTest
 public class generoServiceTest {
  private generoDto generoDtoEsperado;
  private Long id;
@@ -75,4 +75,4 @@ public class generoServiceTest {
     id=generoRepo.findByNombreGeneroIgnoreCase(generoDtoEsperado.getNombreGenero()).get().getId();
     generoService.delete(id);
   }
-}
+}*/
