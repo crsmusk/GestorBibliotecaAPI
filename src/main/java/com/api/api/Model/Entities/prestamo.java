@@ -1,17 +1,11 @@
 package com.api.api.Model.Entities;
 import java.time.LocalDate;
+import java.util.List;
 
 //import java.util.List;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,13 +22,12 @@ public class prestamo {
  private Long id;
     private LocalDate fechaDePrestamo;
     private LocalDate fechaDeEntrega;
- @OneToOne
- @JoinColumn(name="libro_id")
- libro libro;
- 
+    private boolean estadoPrestamo;
+ @OneToMany(mappedBy = "prestamo",cascade = CascadeType.MERGE)
+ List<libro>libros;
  @ManyToOne
  @JoinColumn(name="persona_id")
- private persona persona;
+ private cliente cliente;
 
   
 }
