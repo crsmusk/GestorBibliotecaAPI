@@ -4,13 +4,13 @@ EXPOSE 8080
 
 WORKDIR /app
 
-COPY ./pom.xml /app
-COPY ./.mvn /app/.mvn
-COPY ./mvnw /app
+COPY pom.xml .
+COPY .mvn ./.mvn
+COPY  mvnw .
 
 RUN  ./mvnw dependency:go-offline
 
-COPY ./src /app/src
+COPY src ./src
 
 RUN ./mvnw clean install -DskipTest
 
