@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  biblioteca:
+    image: biblioteca
+    ports:
+      - "8080:80"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATASOURCE_DB: ${SPRING_DATASOURCE_DB}
+    volumes:
+      - ./src:/app/src
+    networks:
+      - backend_network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+     SPRING_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+     SPRING_DATASOURCE: ${SPRING_DATASOURCE_DB}
+    ports:
+      - "3309:3306"
+    volumes:
+     - data_db:/var/lib/mysql
+    networks:
+      - backend_network
+
+volumes:
+  data_db:
+networks:
+  backend_network:
+    driver: bridge

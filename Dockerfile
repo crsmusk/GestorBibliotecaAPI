@@ -7,11 +7,11 @@ WORKDIR /app
 COPY pom.xml .
 COPY .mvn ./.mvn
 COPY  mvnw .
-
+RUN sed -i 's/\r$//' mvnw
 RUN  ./mvnw dependency:go-offline
 
 COPY src ./src
 
-RUN ./mvnw clean install -DskipTest
+RUN ./mvnw clean install -DskipTests
 
 ENTRYPOINT ["java","-jar","/app/target/api-0.0.1-SNAPSHOT.jar"]
